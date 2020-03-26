@@ -20,14 +20,55 @@ function readExpenses(expensesCount = 2) {
       ""
     );
     const cost = +prompt("Во сколько обойдется?", 0);
-    expenses[expense] = cost;
+
+    if (
+      typeof expense === "string" &&
+      typeof expense != null &&
+      typeof cost != null &&
+      expense != "" &&
+      cost != "" &&
+      expense.length < 50
+    ) {
+      console.log("done");
+      expenses[expense] = cost;
+    } else {
+      index = index - 1;
+    }
   }
 
   return expenses;
 }
 
+function getBudgetLevel(budget) {
+  const budgetPerDay = appData.budget / 30;
+  let result = "";
+
+  if (budgetPerDay < 100) {
+    result = "Минимальный уровень достатка";
+  } else if (budgetPerDay > 100 && budgetPerDay < 2000) {
+    result = "Средний уровень достатка";
+  } else if (budgetPerDay > 2000) {
+    result = "Высокий уровень достатка";
+  } else {
+    result = "Произошла ошибка";
+  }
+
+  return result;
+}
+
+function checkSavings() {
+  if (appData.savings == true) {
+    const save = +prompt("Какова сумма накоплений?"),
+      percent = +prompt("Под какой процент?");
+
+    appData.monthIncome = (save / 100 / 12) * percent;
+    alert("Доход в месяц с вашего депозита: " + appData.monthIncome);
+  }
+}
+
+checkSavings();
+
 appData.expenses = readExpenses(expensesCount);
 
 alert(`Бюджет на 1 день ${appData.budget / 30}`);
-
-console.log(appData);
+console.log(getBudgetLevel(appData.budget));
